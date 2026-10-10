@@ -12,12 +12,20 @@ if (-not (Test-Path .env)) {
     Write-Host "Created .env - open it and set ADMIN_EMAILS and your SMTP (Gmail) details." -ForegroundColor Yellow
 }
 
-# Database: PostgreSQL in Docker if available, otherwise SQLite
+# Database: PostgreSQL in Docker if available and running, otherwise SQLite
+$dockerRunning = $false
 if (Get-Command docker -ErrorAction SilentlyContinue) {
+    try {
+        docker ps 2>$null | Out-Null
+        if ($LASTEXITCODE -eq 0) { $dockerRunning = $true }
+    } catch {}
+}
+
+if ($dockerRunning) {
     Write-Host "Starting PostgreSQL in Docker..."
     docker compose up -d db
 } else {
-    Write-Host "Docker not found - switching .env to SQLite (fine for a single laptop)." -ForegroundColor Yellow
+    Write-Host "Docker daemon not running - switching .env to SQLite (fine for a single laptop)." -ForegroundColor Yellow
     (Get-Content .env) -replace '^DATABASE_URL=postgresql.*', 'DATABASE_URL=sqlite:///./campus.db' | Set-Content .env
 }
 
@@ -38,7 +46,11 @@ if ($envText -match 'VAPID_PUBLIC_KEY=\s*\r?\n') {
 
 Write-Host "Downloading model weights..."
 Push-Location video_service
-& "..\.venv\Scripts\python.exe" download_weights.py
+try {
+    & "..\.venv\Scripts\python.exe" download_weights.py
+} catch {
+    Write-Warning "Model weight download warning: $_"
+}
 Pop-Location
 
 Write-Host "Installing frontend packages..."

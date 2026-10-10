@@ -6,9 +6,9 @@ param([switch]$Https)
 Set-Location $PSScriptRoot
 $root = $PSScriptRoot
 
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root\backend'; ..\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root\backend'; python -m uvicorn app.main:app --host 127.0.0.1 --port 8000"
 Start-Sleep -Seconds 3
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root\video_service'; ..\.venv\Scripts\python.exe -m uvicorn app:app --host 127.0.0.1 --port 8001"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root\video_service'; python -m uvicorn app:app --host 127.0.0.1 --port 8001"
 $httpsEnv = if ($Https) { "`$env:HTTPS='1'; " } else { "" }
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root\frontend'; $httpsEnv npm run dev"
 
