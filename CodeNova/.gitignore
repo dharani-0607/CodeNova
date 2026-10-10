@@ -50,6 +50,9 @@ coverage/
 backend/media/
 video_service/weights/*.pt
 video_service/weights/*.onnx
+video_service/*.pt
+video_service/*.onnx
 video_service/samples/*
 !video_service/samples/README.md
 .pytest_cache/
+*.env.txt
