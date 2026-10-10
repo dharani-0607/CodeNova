@@ -1,0 +1,4 @@
+# Local AI moderation model (CPU). Optional: without it moderation uses rules only.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.2
+transformers>=4.41

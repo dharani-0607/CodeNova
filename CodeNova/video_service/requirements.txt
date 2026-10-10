@@ -1,0 +1,14 @@
+# CPU-only PyTorch keeps the install small on a laptop without a GPU
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.2
+torchvision>=0.17
+ultralytics>=8.2
+lap>=0.5  # used by ultralytics' ByteTrack tracker
+opencv-python>=4.9
+numpy>=1.26
+requests>=2.31
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic-settings>=2.3
+pyjwt>=2.8
+huggingface_hub>=0.23
